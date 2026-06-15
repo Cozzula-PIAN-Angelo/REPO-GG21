@@ -1,0 +1,170 @@
+/* Mini-libreria — Settimana VII Giorno I
+   Stile minimal: il focus è sulla logica JS, non sul layout. */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0 !important ;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #f7f7f7;
+  color: #1a1a1a;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.site-header {
+  background: hsl(220, 50%, 25%);
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.site-header h1 {
+  margin: 0 0 8px;
+}
+.site-header p {
+  margin: 0;
+  opacity: 0.85;
+}
+
+.form-control {
+  padding: 0 0 0 0.8em !important ;
+  font-size: 1.5em !important;
+}
+
+.add {
+  padding: 0.5em 1.5em;
+  border-radius: 5px;
+  border: none;
+  background-color: hsl(220, 50%, 25%);
+  color: #f7f7f7;
+  margin-bottom: 1em;
+}
+
+/* === Contatore === */
+
+#contatore-libri {
+  display: inline-block;
+  background: hsl(220, 50%, 25%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+/* === Lista libri === */
+
+#lista-libri {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+#lista-libri li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 28px;
+  border-bottom: 1px solid #e8e8e8;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  transition:
+    border-right-color 0.3s,
+    background 0.3s,
+    color 0.3s;
+}
+
+#lista-libri li.cat-cartaceo {
+  border-right-color: #f0a500;
+}
+#lista-libri li.cat-digitale {
+  border-right-color: #0d6efd;
+}
+#lista-libri li.cat-kindle {
+  border-right-color: #e8590c;
+}
+
+#lista-libri li:last-child {
+  border-bottom: none;
+}
+
+#lista-libri li.letto {
+  background: #f2f2f2;
+  color: #999;
+  border-right-color: #28a745 !important;
+  border-left-color: transparent;
+}
+
+#lista-libri li.letto .libro-titolo,
+#lista-libri li.letto .libro-sottotitolo,
+#lista-libri li.letto .badge-categoria {
+  color: #aaa;
+  background: #e8e8e8;
+}
+
+.libro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.libro-titolo {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-categoria {
+  font-size: 0.72rem;
+  font-weight: 400;
+  background: #efefef;
+  color: #555;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.libro-sottotitolo {
+  font-size: 0.88rem;
+  color: #777;
+}
+
+.btn-segna {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-segna:hover {
+  background: #f0f0f0;
+}
+
+.letto-label {
+  flex-shrink: 0;
+  color: #28a745;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
