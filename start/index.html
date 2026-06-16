@@ -45,7 +45,14 @@
       </form>
 
       <section class="lista-section">
-        <h2>I tuoi libri <span id="contatore-libri">0</span></h2>
+        <div class="lista-header">
+          <h2>I tuoi libri <span id="contatore-libri">0</span></h2>
+          <button id="svuota-tutto" class="btn-svuota">Svuota tutto</button>
+        </div>
+        <p class="info-storage">
+          I libri sono salvati nel browser e sopravvivono al refresh.
+        </p>
+
         <ul id="lista-libri">
           <!-- popolato da JavaScript -->
         </ul>

@@ -35,7 +35,30 @@ class LibroDigitale extends Libro {
 
 const form = document.querySelector(".form-form");
 
-const libri = [];
+const STORAGE_KEY = "libri";
+
+function salvaLibri() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(libri));
+}
+
+function caricaLibri() {
+  const dati = localStorage.getItem(STORAGE_KEY);
+  if (dati === null) {
+    return [];
+  }
+
+  return JSON.parse(dati).map((d) => {
+    const l =
+      d.dimensioneMb !== undefined
+        ? new LibroDigitale(d.titolo, d.autore, d.anno, d.categoria)
+        : new Libro(d.titolo, d.autore, d.anno, d.categoria);
+    l.id = d.id;
+    l.letto = d.letto;
+    return l;
+  });
+}
+
+let libri = caricaLibri();
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -55,6 +78,7 @@ form.addEventListener("submit", (e) => {
     libri.push(new Libro(titolo, autore, anno, categoria));
   }
 
+  salvaLibri();
   form.reset();
   renderLista();
 });
@@ -66,14 +90,15 @@ function renderLista() {
   const ul = document.querySelector("#lista-libri");
   ul.innerHTML = libri
     .map((libro) => {
-      const badgeLabel =
-        libro.dimensioneMb
-          ? `${libro.categoria.toLowerCase()} (${libro.dimensioneMb} MB)`
-          : libro.categoria.toLowerCase();
+      const badgeLabel = libro.dimensioneMb
+        ? `${libro.categoria.toLowerCase()} (${libro.dimensioneMb} MB)`
+        : libro.categoria.toLowerCase();
 
       const azione = libro.letto
-        ? `<span class="letto-label">✓ letto</span>`
-        : `<button class="btn-segna" data-id="${libro.id}">Segna come letto</button>`;
+        ? `<span class="letto-label">✓ letto</span>
+           <button class="btn-rimuovi" data-azione="rimuovi" data-id="${libro.id}">Rimuovi</button>`
+        : `<button class="btn-segna" data-azione="leggi" data-id="${libro.id}">Segna come letto</button>
+           <button class="btn-rimuovi" data-azione="rimuovi" data-id="${libro.id}">Rimuovi</button>`;
 
       const catClass = `cat-${libro.categoria.toLowerCase()}`;
 
@@ -95,12 +120,26 @@ function renderLista() {
 // === Event delegation ===
 
 document.querySelector("#lista-libri").addEventListener("click", (e) => {
-  const btn = e.target.closest(".btn-segna");
-  if (!btn) return;
-  const id = Number(btn.dataset.id);
-  const libro = libri.find((l) => l.id === id);
-  if (libro) {
-    libro.letto = true;
-    renderLista();
+  const bottone = e.target.closest("[data-azione]");
+  if (!bottone) return;
+  const id = Number(bottone.dataset.id);
+  const azione = bottone.dataset.azione;
+
+  if (azione === "leggi") {
+    const libro = libri.find((l) => l.id === id);
+    if (libro) libro.letto = true;
+  } else if (azione === "rimuovi") {
+    libri = libri.filter((l) => l.id !== id);
   }
+
+  salvaLibri();
+  renderLista();
 });
+
+document.getElementById("svuota-tutto").addEventListener("click", () => {
+  libri = [];
+  localStorage.removeItem(STORAGE_KEY);
+  renderLista();
+});
+
+renderLista();

@@ -168,3 +168,26 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+.lista-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-svuota {
+  padding: 6px 14px;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  background: #fff;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.info-storage {
+  font-size: 0.8rem;
+  color: #999;
+  font-style: italic;
+  margin: 4px 0 12px;
+}
