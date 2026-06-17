@@ -35,18 +35,137 @@ body {
   opacity: 0.85;
 }
 
-.form-control {
-  padding: 0 0 0 0.8em !important ;
-  font-size: 1.5em !important;
+/* === Sezione ricerca === */
+
+.cerca-section {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 16px;
 }
 
-.add {
-  padding: 0.5em 1.5em;
-  border-radius: 5px;
-  border: none;
-  background-color: hsl(220, 50%, 25%);
-  color: #f7f7f7;
-  margin-bottom: 1em;
+.cerca-section h2 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  color: hsl(220, 50%, 25%);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.cerca-row {
+  display: flex;
+  gap: 8px;
+}
+
+#filtro-cerca {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+}
+
+#filtro-cerca:focus {
+  border-color: hsl(220, 50%, 40%);
+}
+
+#cerca {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#cerca:focus {
+  border-color: hsl(220, 50%, 40%);
+}
+
+.spinner {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: #777;
+  font-style: italic;
+}
+
+/* === Lista risultati === */
+
+.risultati {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.risultati li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.risultati .titolo {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  display: block;
+}
+
+.risultati .meta {
+  font-size: 0.82rem;
+  color: #777;
+  margin-top: 2px;
+}
+
+.risultati button {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1px solid hsl(220, 50%, 25%);
+  border-radius: 6px;
+  background: #fff;
+  color: hsl(220, 50%, 25%);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.risultati button:hover {
+  background: hsl(220, 50%, 25%);
+  color: #fff;
+}
+
+.risultati button:disabled {
+  border-color: #28a745;
+  color: #28a745;
+  cursor: default;
+  background: #fff;
 }
 
 /* === Contatore === */
@@ -167,6 +286,33 @@ body {
   color: #28a745;
   font-size: 0.9rem;
   font-weight: 500;
+}
+
+.btn-rimuovi {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border: 1px solid rgba(220, 53, 69, 0.4);
+  border-radius: 6px;
+  background: rgba(220, 53, 69, 0.08);
+  color: #dc3545;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: 8px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-rimuovi:hover {
+  background: rgba(220, 53, 69, 0.18);
+  border-color: rgba(220, 53, 69, 0.7);
+}
+
+#lista-libri li > div:last-child,
+#lista-libri li > span:last-child,
+#lista-libri li > button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .lista-header {

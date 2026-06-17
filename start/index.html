@@ -17,32 +17,27 @@
     </header>
 
     <main class="container">
-      <form class="form-form">
-        <h2 class="my-5">Aggiungi un libro</h2>
-        <div class="form-floating mb-3">
-          <h4>Titolo</h4>
-          <input type="text" class="form-control" id="titoloInput" />
+      <section class="cerca-section">
+        <h2>Cerca un libro</h2>
+        <div class="campo">
+          <label for="cerca">Cerca nella libreria</label>
+          <div class="cerca-row">
+            <select id="filtro-cerca">
+              <option value="q">Tutto</option>
+              <option value="title">Titolo</option>
+              <option value="author">Autore</option>
+            </select>
+            <input
+              type="text"
+              id="cerca"
+              placeholder="es. harari, tolkien..."
+            />
+          </div>
         </div>
-        <div class="form-floating mb-3">
-          <h4 for="autoreInput">Autore</h4>
-          <input type="text" class="form-control" id="autoreInput" />
-        </div>
-        <div class="form-floating mb-3">
-          <h4 for="annoInput">Anno</h4>
-          <input type="text" class="form-control" id="annoInput" />
-        </div>
-
-        <div class="form-floating mb-3">
-          <h4 for="categoria">Categoria</h4>
-          <select type="text" class="form-control" id="Categoria">
-            <option value="Cartaceo">Cartaceo</option>
-            <option value="Digitale">Digitale</option>
-            <option value="Kindle">Kindle</option>
-          </select>
-        </div>
-        <button class="add">Aggiungi</button>
-        <!-- form per aggiungere un libro: titolo, autore, anno, formato (cartaceo/digitale) -->
-      </form>
+        <div id="spinner" class="spinner" hidden>Caricamento in corso...</div>
+        <div id="errore" class="alert alert-danger" hidden></div>
+      </section>
+      <ul id="risultati" class="risultati"></ul>
 
       <section class="lista-section">
         <div class="lista-header">

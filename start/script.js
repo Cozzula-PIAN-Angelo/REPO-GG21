@@ -33,8 +33,6 @@ class LibroDigitale extends Libro {
   }
 }
 
-const form = document.querySelector(".form-form");
-
 const STORAGE_KEY = "libri";
 
 function salvaLibri() {
@@ -59,29 +57,6 @@ function caricaLibri() {
 }
 
 let libri = caricaLibri();
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const titolo = document.querySelector("#titoloInput").value.trim();
-  const autore = document.querySelector("#autoreInput").value.trim();
-  const anno = document.querySelector("#annoInput").value.trim();
-  const categoria = document.querySelector("#Categoria").value;
-
-  if (!titolo || !autore || !anno) {
-    alert("Compila tutti i campi prima di aggiungere un libro.");
-    return;
-  }
-
-  if (categoria === "Digitale") {
-    libri.push(new LibroDigitale(titolo, autore, anno, categoria));
-  } else {
-    libri.push(new Libro(titolo, autore, anno, categoria));
-  }
-
-  salvaLibri();
-  form.reset();
-  renderLista();
-});
 
 // === Render ===
 
@@ -143,3 +118,98 @@ document.getElementById("svuota-tutto").addEventListener("click", () => {
 });
 
 renderLista();
+
+function mostraSpinner() {
+  document.getElementById("spinner").hidden = false;
+  document.getElementById("errore").hidden = true;
+}
+
+function nascondiSpinner() {
+  document.getElementById("spinner").hidden = true;
+}
+
+function mostraErrore(msg) {
+  document.getElementById("errore").textContent = msg;
+  document.getElementById("errore").hidden = false;
+}
+
+function cerca(query) {
+  mostraSpinner();
+  const filtro = document.getElementById("filtro-cerca").value;
+  const url =
+    "https://openlibrary.org/search.json?" +
+    filtro +
+    "=" +
+    encodeURIComponent(query) +
+    "&limit=10";
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) throw new Error("Errore HTTP" + response.status);
+      return response.json();
+    })
+    .then((dati) => renderRisultati(dati.docs))
+    .catch((err) =>
+      mostraErrore("impossibile completare la ricerca: " + err.message),
+    )
+    .finally(() => nascondiSpinner());
+}
+
+function renderRisultati(docs) {
+  const ul = document.getElementById("risultati");
+
+  if (docs.length === 0) {
+    ul.innerHTML = "<li>Nessun risultato.</li>";
+    return;
+  }
+  ul.innerHTML = docs
+    .map((d) => {
+      const titolo = d.title;
+      const autore =
+        d.author_name && d.author_name[0]
+          ? d.author_name[0]
+          : "Autore sconosciuto";
+      const anno = d.first_publish_year ? d.first_publish_year : "?";
+      return `
+  <li>
+    <div class="info">
+      <span class="titolo">${titolo}</span>
+      <div class="meta">${autore} - ${anno}</div>
+    </div>
+    <button data-titolo="${titolo}" data-autore="${autore}" data-anno="${anno}">
+      Aggiungi
+    </button>
+  </li>`;
+    })
+    .join("");
+}
+
+let timeoutId;
+
+document.getElementById("cerca").addEventListener("input", (e) => {
+  const query = e.target.value.trim();
+
+  if (query.length < 3) {
+    document.getElementById("risultati").innerHTML = "";
+    return;
+  }
+
+  clearTimeout(timeoutId);
+  timeoutId = setTimeout(() => cerca(query), 400);
+});
+
+document.getElementById("risultati").addEventListener("click", (e) => {
+  const bottone = e.target.closest("button[data-titolo]");
+  if (!bottone) return;
+
+  const titolo = bottone.dataset.titolo;
+  const autore = bottone.dataset.autore;
+  const anno = parseInt(bottone.dataset.anno);
+
+  libri.push(new Libro(titolo, autore, anno, "Cartaceo"));
+  salvaLibri();
+  renderLista();
+
+  bottone.textContent = "✓ Aggiunto";
+  bottone.setAttribute("disabled", "");
+});
