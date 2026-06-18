@@ -117,8 +117,6 @@ document.getElementById("svuota-tutto").addEventListener("click", () => {
   renderLista();
 });
 
-renderLista();
-
 function mostraSpinner() {
   document.getElementById("spinner").hidden = false;
   document.getElementById("errore").hidden = true;
@@ -133,7 +131,7 @@ function mostraErrore(msg) {
   document.getElementById("errore").hidden = false;
 }
 
-function cerca(query) {
+async function cerca(query) {
   mostraSpinner();
   const filtro = document.getElementById("filtro-cerca").value;
   const url =
@@ -143,16 +141,16 @@ function cerca(query) {
     encodeURIComponent(query) +
     "&limit=10";
 
-  fetch(url)
-    .then((response) => {
-      if (!response.ok) throw new Error("Errore HTTP" + response.status);
-      return response.json();
-    })
-    .then((dati) => renderRisultati(dati.docs))
-    .catch((err) =>
-      mostraErrore("impossibile completare la ricerca: " + err.message),
-    )
-    .finally(() => nascondiSpinner());
+  try {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error("Errore HTTP" + r.status);
+    const data = await r.json();
+    renderRisultati(data.docs);
+  } catch (err) {
+    mostraErrore("Impossibile completare la ricerca" + err.message);
+  } finally {
+    nascondiSpinner();
+  }
 }
 
 function renderRisultati(docs) {
@@ -213,3 +211,115 @@ document.getElementById("risultati").addEventListener("click", (e) => {
   bottone.textContent = "✓ Aggiunto";
   bottone.setAttribute("disabled", "");
 });
+
+function getToken() {
+  return localStorage.getItem("auth.token");
+}
+
+function getUtente() {
+  try {
+    return JSON.parse(localStorage.getItem("auth.user"));
+  } catch {
+    return null;
+  }
+}
+
+function logout() {
+  localStorage.removeItem("auth.token");
+  localStorage.removeItem("auth.user");
+  document.getElementById("profilo-section").hidden = true;
+}
+
+async function login(username, password) {
+  const r = await fetch("https://dummyjson.com/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
+  if (!r.ok) throw new Error("Credenziali non valide");
+
+  const dati = await r.json();
+  localStorage.setItem("auth.token", dati.accessToken);
+  localStorage.setItem("auth.user", JSON.stringify(dati));
+  return dati;
+}
+
+async function caricaProfilo() {
+  const token = getToken();
+  if (!token) return null;
+  const r = await fetch("https://dummyjson.com/auth/me", {
+    headers: { Authorization: "Bearer " + token },
+  });
+
+  if (r.status === 401) {
+    logout();
+    return null;
+  }
+  return await r.json();
+}
+
+function renderAuthBox() {
+  const utente = getUtente();
+  const box = document.getElementById("auth-box");
+
+  if (utente) {
+    box.innerHTML = `
+      <span class="saluto">Ciao ${utente.firstName}</span>
+      <button class="btn-logout" id="btn-logout">Esci</button>
+    `;
+    document.getElementById("btn-logout").addEventListener("click", () => {
+      logout();
+      renderAuthBox();
+    });
+    return;
+  }
+  box.innerHTML = ` <form id="form-login">
+        <input id="login-username" type="text" placeholder="Username" value="emilys" />
+        <input id="login-password" type="password" placeholder="Password" value="emilyspass" />
+        <button type="submit">Login</button>
+      </form>
+    `;
+  document
+    .getElementById("form-login")
+    .addEventListener("submit", gestisciLogin);
+}
+
+async function gestisciLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById("login-username").value;
+  const password = document.getElementById("login-password").value;
+
+  try {
+    await login(username, password);
+    renderAuthBox();
+    await mostraProfilo();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function mostraProfilo() {
+  if (!getToken()) return;
+
+  try {
+    const profilo = await caricaProfilo();
+    document.getElementById("profilo").innerHTML = `
+      <img src="${profilo.image}" alt="avatar" />
+      <div class="info">
+        <p><strong>${profilo.firstName} ${profilo.lastName}</strong></p>
+        <p>@${profilo.username} - ${profilo.email}</p>
+      </div>
+    `;
+    document.getElementById("profilo-section").removeAttribute("hidden");
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+async function avvio() {
+  renderLista();
+  renderAuthBox();
+  await mostraProfilo();
+}
+
+avvio();

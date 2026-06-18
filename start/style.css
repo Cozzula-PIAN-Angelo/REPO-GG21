@@ -315,6 +315,128 @@ body {
   gap: 8px;
 }
 
+/* === Auth header === */
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.auth-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#form-login {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#form-login input {
+  padding: 6px 10px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 0.85rem;
+  outline: none;
+  width: 130px;
+}
+
+#form-login input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+#form-login button {
+  padding: 6px 14px;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#form-login button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.saluto {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-logout {
+  padding: 6px 14px;
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* === Sezione profilo === */
+
+.profilo-section {
+  background: hsl(220, 50%, 20%);
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.profilo-section h2 {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profilo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.profilo img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.profilo .info p {
+  margin: 0;
+  text-align: left;
+}
+
+.profilo .info strong {
+  font-size: 1rem;
+}
+
+.profilo .info p:last-child {
+  font-size: 0.82rem;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
 .lista-header {
   display: flex;
   justify-content: space-between;

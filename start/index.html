@@ -12,9 +12,19 @@
   </head>
   <body>
     <header class="site-header">
-      <h1>La mia libreria</h1>
-      <p>Aggiungi i tuoi libri e segnali come letti.</p>
+      <div class="header-row">
+        <div>
+          <h1>La mia libreria</h1>
+          <p>Aggiungi i tuoi libri e segnali come letti.</p>
+        </div>
+        <div id="auth-box" class="auth-box"></div>
+      </div>
     </header>
+
+    <section id="profilo-section" class="profilo-section" hidden>
+      <h2>Il tuo profilo</h2>
+      <div id="profilo" class="profilo"></div>
+    </section>
 
     <main class="container">
       <section class="cerca-section">
